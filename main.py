@@ -85,6 +85,31 @@ app = FastAPI(
     version="1.0.0",
 )
 
+class StripVercelPrefixMiddleware:
+    """
+    Vercel, vercel.json'daki rewrite yüzünden isteği uygulamaya '/api/index/...'
+    yoluyla iletebiliyor. Bu katman o öneki silip asıl yolu (/docs, /events...) geri getirir.
+    Yerelde ve Docker'da hiçbir etkisi yoktur.
+    """
+
+    PREFIXES = ("/api/index", "/api")
+
+    def __init__(self, app):
+        self.app = app
+
+    async def __call__(self, scope, receive, send):
+        if scope["type"] in ("http", "websocket"):
+            path = scope.get("path", "")
+            for prefix in self.PREFIXES:
+                if path == prefix or path.startswith(prefix + "/"):
+                    new_path = path[len(prefix):] or "/"
+                    scope = dict(scope, path=new_path, raw_path=new_path.encode())
+                    break
+        await self.app(scope, receive, send)
+
+
+app.add_middleware(StripVercelPrefixMiddleware)
+
 app.add_middleware(
     CORSMiddleware,
     allow_origins=["*"],

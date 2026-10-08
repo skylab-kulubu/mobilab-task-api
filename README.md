@@ -2,8 +2,8 @@
 
 Etkinlik Keşif Uygulaması görevi için etkinlik API'si.
 
-**Base URL:** `https://<API_ADRESI>`
-**Etkileşimli dokümantasyon:** `https://<API_ADRESI>/docs`
+**Base URL:** `https://https://mobilab-task-api.vercel.app/`
+**Etkileşimli dokümantasyon:** `https://mobilab-task-api.vercel.app//docs`
 
 > Bu API gerçek dünyayı taklit eder: bazı istekler yavaş gelir, bazıları da hata döner.
 > Bu bir hata değil, görevin parçası. Uygulaman bu durumlarla düzgün başa çıkabilmeli.
